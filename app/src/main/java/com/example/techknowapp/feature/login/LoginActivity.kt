@@ -1,8 +1,10 @@
 package com.example.techknowapp.feature.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import androidx.appcompat.app.AppCompatActivity
+import com.example.techknowapp.MainActivity
 import com.example.techknowapp.R
 import com.example.techknowapp.databinding.ActivityLoginBinding
 
@@ -30,7 +32,9 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         binding.btnLogin.setOnClickListener {
-            //todo
+            //todo user validation
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }
