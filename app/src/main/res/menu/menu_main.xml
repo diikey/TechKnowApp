@@ -1,9 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.techknowapp.MainActivity" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+    tools:context="com.example.techknowapp.MainActivity">
+    <!--    <item android:id="@+id/action_settings"-->
+    <!--        android:title="@string/action_settings"-->
+    <!--        android:orderInCategory="100"-->
+    <!--        app:showAsAction="never" />-->
+
+    <item
+        android:id="@+id/FirstFragment"
+        android:title="@string/first_fragment_label" />
+    <!--        android:icon="@drawable/ic_menu_camera"-->
+    <item
+        android:id="@+id/SecondFragment"
+        android:title="@string/second_fragment_label" />
+    <!--        android:icon="@drawable/ic_menu_gallery"-->
 </menu>

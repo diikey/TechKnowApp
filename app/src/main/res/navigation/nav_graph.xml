@@ -3,26 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/DashboardFragment">
+
+    <fragment
+        android:id="@+id/DashboardFragment"
+        android:name="com.example.techknowapp.feature.dashboard.DashboardFragment"
+        tools:layout="@layout/fragment_first">
+        <!--        android:label="@string/first_fragment_label"-->
+
+        <!--        <action-->
+        <!--            android:id="@+id/action_FirstFragment_to_SecondFragment"-->
+        <!--            app:destination="@id/SecondFragment" />-->
+    </fragment>
 
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.example.techknowapp.FirstFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first" >
+        tools:layout="@layout/fragment_first">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+
     </fragment>
+
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.example.techknowapp.SecondFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second" >
+        tools:layout="@layout/fragment_second">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/go_to_dashboard"
+            app:destination="@id/DashboardFragment"
+            app:popUpTo="@id/DashboardFragment"
+            app:popUpToInclusive="true" />
+
     </fragment>
+
 </navigation>
