@@ -89,6 +89,14 @@
             android:text="Login"
             android:textColor="@color/white" />
 
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,7 @@ class Cache(context: Context) {
         if (value == null) return
         app.edit().putString(key, value).apply()
     }
+
     fun save(key: String?, value: Boolean?) {
         if (value == null) return
         app.edit().putBoolean(key, value).apply()
@@ -43,6 +44,7 @@ class Cache(context: Context) {
     }
 
     companion object {
-        const val IS_LOGGED_IN: String = "is_logged_in"
+        const val TOKEN = "token"
+        const val USER_INFO = "user_info"
     }
 }

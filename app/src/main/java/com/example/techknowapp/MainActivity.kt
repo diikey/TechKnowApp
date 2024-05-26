@@ -8,9 +8,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.techknowapp.core.utils.Cache
 import com.example.techknowapp.databinding.ActivityMainBinding
 import com.example.techknowapp.feature.dashboard.DashboardFragment
 import timber.log.Timber
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var cache: Cache
 
     private val onBackCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -49,10 +52,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         onBackPressedDispatcher.addCallback(this, onBackCallback)
+        cache = Cache(applicationContext)
 
         setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.DashboardFragment) {
+                supportActionBar!!.title = "Tech Know"
+            }
+        }
         appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
@@ -65,6 +74,24 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
+        }
+
+        binding.navView.menu.findItem(R.id.logout).setOnMenuItemClickListener {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            AlertDialog.Builder(this).apply {
+                title = "Logout"
+                setMessage("Are you sure you want to logout?")
+                setPositiveButton("YES") { dialog, _ ->
+                    cache.save(Cache.TOKEN, "")
+                    cache.save(Cache.USER_INFO, "")
+                    dialog.dismiss()
+                    finish()
+                }
+                setNegativeButton("NO") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            }.show()
+            true
         }
     }
 

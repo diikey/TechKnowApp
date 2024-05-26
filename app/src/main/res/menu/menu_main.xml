@@ -15,4 +15,8 @@
         android:id="@+id/SecondFragment"
         android:title="@string/second_fragment_label" />
     <!--        android:icon="@drawable/ic_menu_gallery"-->
+
+    <item
+        android:id="@+id/logout"
+        android:title="Logout" />
 </menu>
