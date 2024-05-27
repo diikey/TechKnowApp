@@ -1,6 +1,8 @@
 package com.example.techknowapp
 
+import android.content.pm.PackageInfo
 import android.os.Bundle
+import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -12,9 +14,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.techknowapp.core.model.User
 import com.example.techknowapp.core.utils.Cache
 import com.example.techknowapp.databinding.ActivityMainBinding
 import com.example.techknowapp.feature.dashboard.DashboardFragment
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -70,6 +75,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
+        val headerLayout = binding.navView.getHeaderView(0)
+        val tvName = headerLayout.findViewById<TextView>(R.id.tv_name)
+        val tvEmail = headerLayout.findViewById<TextView>(R.id.tv_email)
+
+        val type = object : TypeToken<User>() {}.type
+        val userInfo = Gson().fromJson<User>(cache.getString(Cache.USER_INFO, ""), type)
+
+        val packageManager = this.packageManager
+        val packageInfo: PackageInfo
+        var version = ""
+        try {
+            packageInfo = packageManager.getPackageInfo(this.packageName, 0)
+            version = packageInfo.versionName
+        } catch (e: Exception) {
+            Timber.d("COULDN'T GET VERSION INFORMATION")
+            e.printStackTrace()
+        }
+
+        /**
+         * TEXTVIEWS
+         */
+        tvName.text = userInfo.username
+        tvEmail.text = userInfo.email
+        binding.tvAppVersion.text = getString(R.string.version_name, version)
+
+        /**
+         * ON CLICKS COMPONENTS
+         */
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
