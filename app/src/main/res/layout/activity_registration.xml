@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="75dp"
-    tools:context=".feature.login.LoginActivity">
+    tools:context=".feature.registration.RegistrationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="Login"
+            android:text="Register"
             android:textAlignment="center"
             android:textSize="30sp" />
 
@@ -39,6 +39,25 @@
             android:layout_height="38dp"
             android:background="@drawable/border_rectangle_r12"
             android:hint="Enter Username"
+            android:inputType="text"
+            android:maxLines="1"
+            android:padding="6dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:background="@drawable/border_rectangle_r12"
+            android:hint="Enter Email"
             android:inputType="text"
             android:maxLines="1"
             android:padding="6dp"
@@ -80,13 +99,79 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- Your password can’t be too similar to your other personal information."
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- Your password must contain at least 8 characters."
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- Your password can’t be a commonly used password."
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- Your password can’t be entirely numeric."
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password Confirmation"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_password_confirmation"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_rectangle_r12"
+                android:hint="Enter Password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/iv_eye_confirmation"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:src="@mipmap/eye" />
+
+        </LinearLayout>
+
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/button_background_r10"
-            android:text="Login"
+            android:text="Submit"
             android:textColor="@color/white" />
 
         <ProgressBar
@@ -96,40 +181,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/qwe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:text="Or" />
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_background_r10"
-            android:text="Register"
-            android:textColor="@color/white" />
 
     </LinearLayout>
 

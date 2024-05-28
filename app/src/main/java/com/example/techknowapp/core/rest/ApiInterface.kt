@@ -16,4 +16,7 @@ interface ApiInterface {
      */
     @POST("login")
     fun login(@Body params: HashMap<String, String>): Call<LoginResponse>
+
+    @POST("register")
+    fun register(@Body params: Map<String, String>): Call<LoginResponse>
 }

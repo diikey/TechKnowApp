@@ -13,6 +13,7 @@ import com.example.techknowapp.core.utils.Cache
 import com.example.techknowapp.databinding.ActivityLoginBinding
 import com.example.techknowapp.feature.login.utils.LoginApiCallback
 import com.example.techknowapp.feature.login.utils.LoginApiUtils
+import com.example.techknowapp.feature.registration.RegistrationActivity
 import com.google.gson.Gson
 import timber.log.Timber
 
@@ -56,6 +57,12 @@ class LoginActivity : AppCompatActivity(), LoginApiCallback {
                 binding.etPassword.text.toString()
             )
         }
+        binding.btnRegister.setOnClickListener {
+            if (binding.pbLoading.visibility == View.VISIBLE) return@setOnClickListener
+            Intent(this, RegistrationActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
     }
 
     private fun hideShowLoading(isShow: Boolean) {
@@ -69,6 +76,9 @@ class LoginActivity : AppCompatActivity(), LoginApiCallback {
     }
 
     private fun goToMainActivity() {
+        binding.etUsername.text.clear()
+        binding.etPassword.text.clear()
+
         Intent(this, MainActivity::class.java).apply {
             startActivity(this)
         }
