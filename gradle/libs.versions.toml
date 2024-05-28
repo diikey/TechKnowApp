@@ -15,11 +15,13 @@ navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
 okhttp = "4.9.2"
 retrofit = "2.9.0"
+swiperefreshlayout = "1.2.0-alpha01"
 timber = "4.7.1"
 activity = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

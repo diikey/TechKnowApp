@@ -8,8 +8,11 @@ import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
 interface ApiInterface {
-    @GET("pokemon")
-    fun getFunction(@QueryMap params: Map<String, String>): Call<DynamicResponse>
+    /**
+     * GET REQUEST
+     */
+    @GET("get_course")
+    fun getCourse(@QueryMap params: Map<String, String>): Call<DynamicResponse>
 
     /**
      * POST REQUEST

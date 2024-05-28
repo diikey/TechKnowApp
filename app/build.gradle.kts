@@ -64,6 +64,9 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    // SwipeRefreshLayout
+    implementation (libs.androidx.swiperefreshlayout)
 }
 
 // Allow references to generated code
