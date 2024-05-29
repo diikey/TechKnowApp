@@ -1,6 +1,7 @@
 package com.example.techknowapp.feature.dashboard.utils
 
 import android.content.Context
+import com.example.techknowapp.core.model.Course
 import com.example.techknowapp.core.rest.ApiClient
 import com.example.techknowapp.core.rest.ApiInterface
 import com.example.techknowapp.core.rest.DynamicResponse
@@ -16,27 +17,44 @@ class DashboardApiUtils(private val context: Context, activity: Any) {
     private val cache = Cache(context)
 
     fun getCourse() {
-        val params = HashMap<String, String>().apply {
-            put("token", cache.getString(Cache.TOKEN, "")!!)
-        }
         val apiService = ApiClient(context).createService(ApiInterface::class.java)
-        val call = apiService.getCourse(params)
+        val call = apiService.getCourse()
+        call.enqueue(object : Callback<List<Course>> {
+            override fun onResponse(call: Call<List<Course>>, response: Response<List<Course>>) {
+                Timber.d("success result>>>${Gson().toJson(response.body())}")
+                if (response.body() != null) {
+                    callback.result(API_SUCCESS, response.body())
+                } else {
+                    callback.result(API_FAILED, null)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Course>>, t: Throwable) {
+                t.printStackTrace()
+                callback.result(API_FAILED, null)
+            }
+        })
+    }
+
+    fun applyCourse(params: HashMap<String, String>) {
+        val apiService = ApiClient(context).createService(ApiInterface::class.java)
+        val call = apiService.applyCourse(params)
         call.enqueue(object : Callback<DynamicResponse> {
             override fun onResponse(
                 call: Call<DynamicResponse>,
                 response: Response<DynamicResponse>
             ) {
-                Timber.d("success result>>>${Gson().toJson(response.body())}")
+                Timber.d("success result>>>${response.body()}")
                 if (response.body() != null) {
-                    callback.result(API_SUCCESS)
+                    callback.result(APPLICATION_SUCCESS, null)
                 } else {
-                    callback.result(API_FAILED)
+                    callback.result(APPLICATION_FAILED, null)
                 }
             }
 
             override fun onFailure(call: Call<DynamicResponse>, t: Throwable) {
                 t.printStackTrace()
-                callback.result(API_FAILED)
+                callback.result(APPLICATION_FAILED, null)
             }
         })
     }
@@ -44,9 +62,11 @@ class DashboardApiUtils(private val context: Context, activity: Any) {
     companion object {
         const val API_SUCCESS = "success"
         const val API_FAILED = "failed"
+        const val APPLICATION_SUCCESS = "application_success"
+        const val APPLICATION_FAILED = "application_failed"
     }
 }
 
 interface DashboardApiCallback {
-    fun result(apiResult: String)
+    fun <T> result(apiResult: String, response: T?)
 }

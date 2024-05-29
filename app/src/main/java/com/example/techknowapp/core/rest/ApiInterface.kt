@@ -1,5 +1,6 @@
 package com.example.techknowapp.core.rest
 
+import com.example.techknowapp.core.model.Course
 import com.example.techknowapp.core.model.LoginResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -12,7 +13,7 @@ interface ApiInterface {
      * GET REQUEST
      */
     @GET("get_course")
-    fun getCourse(@QueryMap params: Map<String, String>): Call<DynamicResponse>
+    fun getCourse(): Call<List<Course>>
 
     /**
      * POST REQUEST
@@ -22,4 +23,7 @@ interface ApiInterface {
 
     @POST("register")
     fun register(@Body params: Map<String, String>): Call<LoginResponse>
+
+    @POST("applycourse")
+    fun applyCourse(@Body params: Map<String, String>): Call<DynamicResponse>
 }

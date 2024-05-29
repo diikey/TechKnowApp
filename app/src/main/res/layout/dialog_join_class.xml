@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:minWidth="300dp"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <EditText
+        android:id="@+id/et_course_code"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/border_rectangle_r12"
+        android:hint="Enter Class Code"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="6dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/btn_join_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_background_r10"
+        android:text="Join Class"
+        android:textColor="@color/white" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading_join"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:visibility="gone" />
+
+</LinearLayout>
