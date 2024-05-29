@@ -16,11 +16,8 @@ class DashboardApiUtils(private val context: Context, activity: Any) {
     private val cache = Cache(context)
 
     fun getCourse() {
-        val params = HashMap<String, String>().apply {
-            put("token", cache.getString(Cache.TOKEN, "")!!)
-        }
         val apiService = ApiClient(context).createService(ApiInterface::class.java)
-        val call = apiService.getCourse(params)
+        val call = apiService.getCourse()
         call.enqueue(object : Callback<DynamicResponse> {
             override fun onResponse(
                 call: Call<DynamicResponse>,

@@ -12,7 +12,7 @@ interface ApiInterface {
      * GET REQUEST
      */
     @GET("get_course")
-    fun getCourse(@QueryMap params: Map<String, String>): Call<DynamicResponse>
+    fun getCourse(): Call<DynamicResponse>
 
     /**
      * POST REQUEST
