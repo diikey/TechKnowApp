@@ -2,6 +2,7 @@ package com.example.techknowapp
 
 import android.content.pm.PackageInfo
 import android.os.Bundle
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -78,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         val headerLayout = binding.navView.getHeaderView(0)
         val tvName = headerLayout.findViewById<TextView>(R.id.tv_name)
         val tvEmail = headerLayout.findViewById<TextView>(R.id.tv_email)
+        val profile = headerLayout.findViewById<LinearLayout>(R.id.lin_profile)
 
         val type = object : TypeToken<User>() {}.type
         val userInfo = Gson().fromJson<User>(cache.getString(Cache.USER_INFO, ""), type)
@@ -126,6 +128,13 @@ class MainActivity : AppCompatActivity() {
             }.show()
             true
         }
+
+        profile.setOnClickListener {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            navController.navigate(R.id.action_DashboardFragment_to_ProfileFragment)
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
