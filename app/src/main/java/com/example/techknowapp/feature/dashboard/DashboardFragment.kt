@@ -7,11 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.techknowapp.core.model.Course
 import com.example.techknowapp.databinding.FragmentDashboardBinding
 import com.example.techknowapp.feature.dashboard.adapters.ClassRvAdapter
+import com.example.techknowapp.feature.dashboard.dialogs.JoinClassDialog
 import com.example.techknowapp.feature.dashboard.utils.DashboardApiCallback
 import com.example.techknowapp.feature.dashboard.utils.DashboardApiUtils
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -23,6 +28,7 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
     private lateinit var binding: FragmentDashboardBinding
     private lateinit var adapter: ClassRvAdapter
     private lateinit var dashboardApiUtils: DashboardApiUtils
+    private lateinit var joinClassDialog: JoinClassDialog
 
     companion object {
         const val TAG = "DashboardFragment"
@@ -48,6 +54,8 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
     }
 
     private fun initComponents() {
+        joinClassDialog = JoinClassDialog(this)
+
         /**
          * SWIPE REFRESH LAYOUT
          */
@@ -58,30 +66,31 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
         /**
          * RECYCLER VIEW ADAPTER
          */
-        val list = listOf(
-            "Class 1",
-            "Class 2iahsdihavdiva ahsvdia db",
-            "Class 3",
-            "Class 4",
-            "Class 5",
-            "Class 6"
-        )
         binding.rvClassList.layoutManager =
             GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
-        adapter = ClassRvAdapter()
+        adapter = ClassRvAdapter(
+            onListUpdate = {
+                classListCallback()
+            },
+            goToCourseDetails = { course ->
+                goToCourseDetails(course)
+            }
+        )
         adapter.onAttachedToRecyclerView(binding.rvClassList)
         binding.rvClassList.adapter = adapter
         binding.rvClassList.setHasFixedSize(true)
-        adapter.updateItems(list)
+//        adapter.updateItems(list)
 
         /**
          * ON CLICKS
          */
         binding.linJoinClass.setOnClickListener {
-            Intent(Intent.ACTION_VIEW).apply {
-                setData(Uri.parse("https://www.google.com/"))
-                startActivity(this)
-            }
+//            Intent(Intent.ACTION_VIEW).apply {
+//                setData(Uri.parse("https://www.google.com/"))
+//                startActivity(this)
+//            }
+            joinClassDialog.isCancelable = true
+            joinClassDialog.show(childFragmentManager, JoinClassDialog::class.java.simpleName)
         }
     }
 
@@ -97,13 +106,59 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
             binding.pbLoadingClasses.visibility = View.VISIBLE
             return
         }
-        binding.rvClassList.visibility = View.VISIBLE
-        binding.linJoinClass.visibility = View.VISIBLE
+        classListCallback()
         binding.pbLoadingClasses.visibility = View.GONE
     }
 
-    override fun result(apiResult: String) {
+    private fun classListCallback() {
+        if (adapter.itemCount == 0) {
+            binding.rvClassList.visibility = View.GONE
+            binding.linJoinClass.visibility = View.VISIBLE
+            return
+        }
+        binding.rvClassList.visibility = View.VISIBLE
+        binding.linJoinClass.visibility = View.GONE
+    }
+
+    private fun failedApiToast() {
+        Toast.makeText(
+            requireContext(),
+            "Something went wrong, please try again,",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun goToCourseDetails(course: Course) {
+        //todo go to course detail page
+        Timber.d("selected course>>>${Gson().toJson(course)}")
+//        findNavController().navigate()
+    }
+
+    override fun <T> result(apiResult: String, response: T?) {
+        binding.swipeRefreshLayout.isRefreshing = false
         hideShowLoading(false)
-        Timber.d("result>>>$apiResult")
+        Timber.d("dashboard result>>>$apiResult")
+        when (apiResult) {
+            DashboardApiUtils.API_SUCCESS -> {
+                val listCourse = response as List<Course>
+                adapter.updateItems(listCourse)
+            }
+
+            DashboardApiUtils.API_FAILED -> {
+                failedApiToast()
+            }
+
+            DashboardApiUtils.APPLICATION_SUCCESS -> {
+                Toast.makeText(requireContext(), "Class for approval!", Toast.LENGTH_SHORT).show()
+                joinClassDialog.hideShowLoading(false)
+                joinClassDialog.dismissAllowingStateLoss()
+                initApiCall()
+            }
+
+            DashboardApiUtils.APPLICATION_FAILED -> {
+                joinClassDialog.hideShowLoading(false)
+                failedApiToast()
+            }
+        }
     }
 }

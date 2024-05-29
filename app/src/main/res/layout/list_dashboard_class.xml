@@ -12,18 +12,26 @@
         app:cardElevation="0dp">
 
         <LinearLayout
+            android:id="@+id/lin_course"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_image_placheholder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:background="#014c3e"
-                android:padding="35dp"
+                android:gravity="center"
                 android:text="Some Image"
-                android:textAlignment="center"
                 android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/iv_course_image"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="#014c3e"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"

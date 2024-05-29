@@ -67,6 +67,9 @@ dependencies {
 
     // SwipeRefreshLayout
     implementation (libs.androidx.swiperefreshlayout)
+
+    // Coil Image
+    implementation(libs.coil)
 }
 
 // Allow references to generated code

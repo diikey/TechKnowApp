@@ -33,8 +33,8 @@ class ApiClient(private val context: Context) {
             .header(contentType, contentTypeValue)
             .method(original.method, original.body)
 
-        if (cache.getString(Cache.TOKEN, "") != "") {
-            request.addHeader("Authorization", "Token ${cache.getString(Cache.TOKEN, "")}")
+        if (cache.getString(token, "") != "") {
+            request.addHeader("Authorization", "Token ${cache.getString(token, "")}")
         }
 
         Timber.d(">>>>SERVICEGENERATOR >>> headerInterceptor")
