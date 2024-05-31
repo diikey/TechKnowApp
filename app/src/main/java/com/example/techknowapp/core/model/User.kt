@@ -8,7 +8,7 @@ data class User(
     val id: String,
     val image: String,
     val last_name: String,
-//    val password: String,
+    val password: String,
     val student_id: String,
     val username: String,
 )
