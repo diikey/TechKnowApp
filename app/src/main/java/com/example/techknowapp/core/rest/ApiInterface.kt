@@ -30,4 +30,7 @@ interface ApiInterface {
 
     @POST("applycourse")
     fun applyCourse(@Body params: Map<String, String>): Call<DynamicResponse>
+
+    @POST("profile")
+    fun postProfile(@Body params: Map<String, String>): Call<DynamicResponse>
 }
