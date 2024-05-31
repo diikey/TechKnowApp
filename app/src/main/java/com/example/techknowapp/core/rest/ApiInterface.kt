@@ -2,6 +2,7 @@ package com.example.techknowapp.core.rest
 
 import com.example.techknowapp.core.model.Course
 import com.example.techknowapp.core.model.LoginResponse
+import com.example.techknowapp.core.model.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -14,6 +15,9 @@ interface ApiInterface {
      */
     @GET("get_course")
     fun getCourse(): Call<List<Course>>
+
+    @GET("profile")
+    fun getProfile() : Call<User>
 
     /**
      * POST REQUEST

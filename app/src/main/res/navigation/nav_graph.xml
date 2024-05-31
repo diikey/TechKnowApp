@@ -14,6 +14,20 @@
         <!--        <action-->
         <!--            android:id="@+id/action_FirstFragment_to_SecondFragment"-->
         <!--            app:destination="@id/SecondFragment" />-->
+        <action
+            android:id="@+id/action_DashboardFragment_to_ProfileFragment"
+            app:destination="@id/ProfileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ProfileFragment"
+        android:name="com.example.techknowapp.feature.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+        <!--        android:label="@string/first_fragment_label"-->
+
+        <!--        <action-->
+        <!--            android:id="@+id/action_FirstFragment_to_SecondFragment"-->
+        <!--            app:destination="@id/SecondFragment" />-->
     </fragment>
 
     <fragment
@@ -45,5 +59,7 @@
             app:popUpToInclusive="true" />
 
     </fragment>
+
+
 
 </navigation>
