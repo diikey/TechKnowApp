@@ -8,10 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.techknowapp.R
 import com.example.techknowapp.core.model.Course
+import com.example.techknowapp.core.model.GlobalAnnouncement
 import com.example.techknowapp.databinding.FragmentDashboardBinding
+import com.example.techknowapp.feature.dashboard.adapters.AnnouncementsRvAdapter
 import com.example.techknowapp.feature.dashboard.adapters.ClassRvAdapter
 import com.example.techknowapp.feature.dashboard.dialogs.JoinClassDialog
 import com.example.techknowapp.feature.dashboard.utils.DashboardApiCallback
@@ -27,6 +32,7 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
 
     private lateinit var binding: FragmentDashboardBinding
     private lateinit var adapter: ClassRvAdapter
+    private lateinit var announcementAdapter: AnnouncementsRvAdapter
     private lateinit var dashboardApiUtils: DashboardApiUtils
     private lateinit var joinClassDialog: JoinClassDialog
 
@@ -79,7 +85,18 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
         adapter.onAttachedToRecyclerView(binding.rvClassList)
         binding.rvClassList.adapter = adapter
         binding.rvClassList.setHasFixedSize(true)
-//        adapter.updateItems(list)
+
+        binding.rvAnnouncements.layoutManager = LinearLayoutManager(requireContext())
+        announcementAdapter = AnnouncementsRvAdapter(
+            onListUpdate = {
+                announcementListCallback()
+            },
+            goToAnnouncementDetails = { announcement ->
+                goToAnnouncementDetails(announcement)
+            }
+        )
+        announcementAdapter.onAttachedToRecyclerView(binding.rvAnnouncements)
+        binding.rvAnnouncements.adapter = announcementAdapter
 
         /**
          * ON CLICKS
@@ -96,16 +113,23 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
 
     private fun initApiCall() {
         hideShowLoading(true)
+        dashboardApiUtils.getAnnouncements()
         dashboardApiUtils.getCourse()
     }
 
     private fun hideShowLoading(isShow: Boolean) {
         if (isShow) {
+            binding.rvAnnouncements.visibility = View.GONE
+            binding.tvNoAnnouncements.visibility = View.GONE
+            binding.pbLoadingAnnouncements.visibility = View.VISIBLE
+
             binding.rvClassList.visibility = View.GONE
             binding.linJoinClass.visibility = View.GONE
             binding.pbLoadingClasses.visibility = View.VISIBLE
             return
         }
+        announcementListCallback()
+        binding.pbLoadingAnnouncements.visibility = View.GONE
         classListCallback()
         binding.pbLoadingClasses.visibility = View.GONE
     }
@@ -120,6 +144,16 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
         binding.linJoinClass.visibility = View.GONE
     }
 
+    private fun announcementListCallback() {
+        if (announcementAdapter.itemCount == 0) {
+            binding.rvAnnouncements.visibility = View.GONE
+            binding.tvNoAnnouncements.visibility = View.VISIBLE
+            return
+        }
+        binding.rvAnnouncements.visibility = View.VISIBLE
+        binding.tvNoAnnouncements.visibility = View.GONE
+    }
+
     private fun failedApiToast() {
         Toast.makeText(
             requireContext(),
@@ -129,9 +163,13 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
     }
 
     private fun goToCourseDetails(course: Course) {
-        //todo go to course detail page
-        Timber.d("selected course>>>${Gson().toJson(course)}")
-//        findNavController().navigate()
+        val bundle = bundleOf("course" to Gson().toJson(course))
+        findNavController().navigate(R.id.action_DashboardFragment_to_CourseFragment, bundle)
+    }
+
+    private fun goToAnnouncementDetails(announcement: GlobalAnnouncement) {
+        val bundle = bundleOf("announcement" to Gson().toJson(announcement))
+        findNavController().navigate(R.id.action_DashboardFragment_to_CourseFragment, bundle)
     }
 
     override fun <T> result(apiResult: String, response: T?) {
@@ -145,7 +183,7 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
             }
 
             DashboardApiUtils.API_FAILED -> {
-                failedApiToast()
+//                failedApiToast()
             }
 
             DashboardApiUtils.APPLICATION_SUCCESS -> {
@@ -158,6 +196,15 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
             DashboardApiUtils.APPLICATION_FAILED -> {
                 joinClassDialog.hideShowLoading(false)
                 failedApiToast()
+            }
+
+            DashboardApiUtils.ANNOUNCEMENT_SUCCESS -> {
+                val listAnnouncements = response as List<GlobalAnnouncement>
+                announcementAdapter.updateItems(listAnnouncements)
+            }
+
+            DashboardApiUtils.ANNOUNCEMENT_FAILED -> {
+//                failedApiToast()
             }
         }
     }
