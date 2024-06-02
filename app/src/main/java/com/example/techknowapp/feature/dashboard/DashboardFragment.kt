@@ -88,9 +88,6 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
         announcementAdapter = AnnouncementsRvAdapter(
             onListUpdate = {
                 announcementListCallback()
-            },
-            goToAnnouncementDetails = { announcement ->
-                goToAnnouncementDetails(announcement)
             }
         )
         announcementAdapter.onAttachedToRecyclerView(binding.rvAnnouncements)
@@ -158,11 +155,6 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
 
     private fun goToCourseDetails(course: Course) {
         val bundle = bundleOf("course" to Gson().toJson(course))
-        findNavController().navigate(R.id.action_DashboardFragment_to_CourseFragment, bundle)
-    }
-
-    private fun goToAnnouncementDetails(announcement: Announcement) {
-        val bundle = bundleOf("announcement" to Gson().toJson(announcement))
         findNavController().navigate(R.id.action_DashboardFragment_to_CourseFragment, bundle)
     }
 

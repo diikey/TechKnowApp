@@ -8,22 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.techknowapp.core.model.Announcement
 import com.example.techknowapp.databinding.ListDashboardAnnouncementsBinding
 
-class AnnouncementsRvAdapter(
-    private val onListUpdate: () -> Unit,
-    private val goToAnnouncementDetails: (Announcement) -> Unit
-) : RecyclerView.Adapter<AnnouncementsRvAdapter.ViewHolder>() {
+class AnnouncementsRvAdapter(private val onListUpdate: () -> Unit) :
+    RecyclerView.Adapter<AnnouncementsRvAdapter.ViewHolder>() {
 
-    class ViewHolder(
-        private val binding: ListDashboardAnnouncementsBinding,
-        private val goToAnnouncementDetails: (Announcement) -> Unit
-    ) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: ListDashboardAnnouncementsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Announcement) {
             binding.tvAnnouncementTitle.text = data.title
             binding.tvAnnouncementDescription.text = data.description
-
-            binding.linAnnouncement.setOnClickListener {
-                goToAnnouncementDetails(data)
-            }
         }
     }
 
@@ -33,7 +25,7 @@ class AnnouncementsRvAdapter(
             parent,
             false
         )
-        return ViewHolder(itemBinding, goToAnnouncementDetails)
+        return ViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
