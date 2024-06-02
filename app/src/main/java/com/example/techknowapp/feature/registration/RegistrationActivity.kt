@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.isDigitsOnly
 import com.example.techknowapp.R
 import com.example.techknowapp.databinding.ActivityRegistrationBinding
 import com.example.techknowapp.feature.registration.utils.RegistrationApiCallback
@@ -85,6 +86,35 @@ class RegistrationActivity : AppCompatActivity(), RegistrationApiCallback {
             Toast.makeText(applicationContext, "Password doesn't match.", Toast.LENGTH_SHORT)
                 .show()
             return false
+        }
+
+        var pass = binding.etPassword.text.toString()
+        Timber.d("length " + (pass.length<8) + " pass digit " + (pass.isDigitsOnly()) + " pass letter " + (pass.all { it.isLetter() }) + " ismix lower upper " + !(pass.any(Char::isLowerCase) && pass.any(Char::isUpperCase)))
+//        if (pass.length<8 || !pass.isDigitsOnly() || (pass.any(Char::isLowerCase) && pass.any(Char::isUpperCase)) || pass.all { it.isLetter() }){
+//            return false
+//        }
+
+        if (pass.length<8){
+            Toast.makeText(applicationContext, "Password must contain at least 8 characters.", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
+
+        if (pass.isDigitsOnly()){
+            Toast.makeText(applicationContext, "Password must contain letters and numbers.", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
+
+        if (pass.all { it.isLetter() }){
+            Toast.makeText(applicationContext, "Password must contain letters and numbers.", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
+
+        if (!(pass.any(Char::isLowerCase) && pass.any(Char::isUpperCase))){
+            Toast.makeText(applicationContext, "Password must contain lowercase and uppercase.", Toast.LENGTH_SHORT)
+                .show()
         }
 
         return true
