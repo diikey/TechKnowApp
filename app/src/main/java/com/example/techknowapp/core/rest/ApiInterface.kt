@@ -5,6 +5,7 @@ import com.example.techknowapp.core.model.Announcement
 import com.example.techknowapp.core.model.CourseModule
 import com.example.techknowapp.core.model.LoginResponse
 import com.example.techknowapp.core.model.Quiz
+import com.example.techknowapp.core.model.TakeQuizRes
 import com.example.techknowapp.core.model.User
 import retrofit2.Call
 import retrofit2.http.Body
@@ -33,6 +34,9 @@ interface ApiInterface {
 
     @GET("get_quiz")
     fun getQuiz(@QueryMap params: Map<String, String>): Call<List<Quiz>>
+
+    @GET("get_multiple_choice")
+    fun getQuestions(@QueryMap params: Map<String, String>): Call<TakeQuizRes>
 
     /**
      * POST REQUEST
