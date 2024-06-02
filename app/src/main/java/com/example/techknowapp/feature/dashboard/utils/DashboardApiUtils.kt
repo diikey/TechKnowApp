@@ -2,7 +2,7 @@ package com.example.techknowapp.feature.dashboard.utils
 
 import android.content.Context
 import com.example.techknowapp.core.model.Course
-import com.example.techknowapp.core.model.GlobalAnnouncement
+import com.example.techknowapp.core.model.Announcement
 import com.example.techknowapp.core.rest.ApiClient
 import com.example.techknowapp.core.rest.ApiInterface
 import com.example.techknowapp.core.rest.DynamicResponse
@@ -20,10 +20,10 @@ class DashboardApiUtils(private val context: Context, activity: Any) {
     fun getAnnouncements() {
         val apiService = ApiClient(context).createService(ApiInterface::class.java)
         val call = apiService.getGlobalAnnouncement()
-        call.enqueue(object : Callback<List<GlobalAnnouncement>> {
+        call.enqueue(object : Callback<List<Announcement>> {
             override fun onResponse(
-                call: Call<List<GlobalAnnouncement>>,
-                response: Response<List<GlobalAnnouncement>>
+                call: Call<List<Announcement>>,
+                response: Response<List<Announcement>>
             ) {
                 Timber.d("announcements>>>${response.body()}")
                 if (response.body() != null) {
@@ -33,7 +33,7 @@ class DashboardApiUtils(private val context: Context, activity: Any) {
                 }
             }
 
-            override fun onFailure(call: Call<List<GlobalAnnouncement>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Announcement>>, t: Throwable) {
                 t.printStackTrace()
                 callback.result(ANNOUNCEMENT_FAILED, null)
             }

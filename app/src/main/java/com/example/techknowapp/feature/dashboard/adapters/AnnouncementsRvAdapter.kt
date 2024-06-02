@@ -5,19 +5,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.techknowapp.core.model.GlobalAnnouncement
+import com.example.techknowapp.core.model.Announcement
 import com.example.techknowapp.databinding.ListDashboardAnnouncementsBinding
 
 class AnnouncementsRvAdapter(
     private val onListUpdate: () -> Unit,
-    private val goToAnnouncementDetails: (GlobalAnnouncement) -> Unit
+    private val goToAnnouncementDetails: (Announcement) -> Unit
 ) : RecyclerView.Adapter<AnnouncementsRvAdapter.ViewHolder>() {
 
     class ViewHolder(
         private val binding: ListDashboardAnnouncementsBinding,
-        private val goToAnnouncementDetails: (GlobalAnnouncement) -> Unit
+        private val goToAnnouncementDetails: (Announcement) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: GlobalAnnouncement) {
+        fun bind(data: Announcement) {
             binding.tvAnnouncementTitle.text = data.title
             binding.tvAnnouncementDescription.text = data.description
 
@@ -45,30 +45,30 @@ class AnnouncementsRvAdapter(
         return differ.currentList.size
     }
 
-    private val diffCallBack = object : DiffUtil.ItemCallback<GlobalAnnouncement>() {
+    private val diffCallBack = object : DiffUtil.ItemCallback<Announcement>() {
         override fun areContentsTheSame(
-            oldItem: GlobalAnnouncement,
-            newItem: GlobalAnnouncement
+            oldItem: Announcement,
+            newItem: Announcement
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areItemsTheSame(
-            oldItem: GlobalAnnouncement,
-            newItem: GlobalAnnouncement
+            oldItem: Announcement,
+            newItem: Announcement
         ): Boolean {
             return oldItem.id == newItem.id
         }
     }
     private val differ = AsyncListDiffer(this, diffCallBack)
 
-    fun updateItems(newItems: List<GlobalAnnouncement>) {
+    fun updateItems(newItems: List<Announcement>) {
         differ.submitList(newItems) {
             onListUpdate()
         }
     }
 
-    fun getItems(): List<GlobalAnnouncement> {
+    fun getItems(): List<Announcement> {
         return differ.currentList
     }
 }

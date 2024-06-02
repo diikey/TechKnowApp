@@ -1,7 +1,8 @@
 package com.example.techknowapp.core.rest
 
 import com.example.techknowapp.core.model.Course
-import com.example.techknowapp.core.model.GlobalAnnouncement
+import com.example.techknowapp.core.model.Announcement
+import com.example.techknowapp.core.model.CourseModule
 import com.example.techknowapp.core.model.LoginResponse
 import com.example.techknowapp.core.model.User
 import retrofit2.Call
@@ -21,13 +22,16 @@ interface ApiInterface {
     fun getProfile(): Call<User>
 
     @GET("get_global_announcement")
-    fun getGlobalAnnouncement(): Call<List<GlobalAnnouncement>>
+    fun getGlobalAnnouncement(): Call<List<Announcement>>
 
-    @GET("get_course_announcement")
-    fun getCourseAnnouncement(@QueryMap params: Map<String, String>): Call<List<DynamicResponse>>
+    @GET("course_announcement")
+    fun getCourseAnnouncement(@QueryMap params: Map<String, String>): Call<List<Announcement>>
 
-    @GET("get_course_module")
-    fun getCourseModules(@QueryMap params: Map<String, String>): Call<List<DynamicResponse>>
+    @GET("course_module")
+    fun getCourseModules(@QueryMap params: Map<String, String>): Call<List<CourseModule>>
+
+    @GET("get_quiz")
+    fun getQuiz(@QueryMap params: Map<String, String>): Call<List<DynamicResponse>>
 
     /**
      * POST REQUEST

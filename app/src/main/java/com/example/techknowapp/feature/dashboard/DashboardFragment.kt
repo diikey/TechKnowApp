@@ -1,7 +1,5 @@
 package com.example.techknowapp.feature.dashboard
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,7 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.techknowapp.R
 import com.example.techknowapp.core.model.Course
-import com.example.techknowapp.core.model.GlobalAnnouncement
+import com.example.techknowapp.core.model.Announcement
 import com.example.techknowapp.databinding.FragmentDashboardBinding
 import com.example.techknowapp.feature.dashboard.adapters.AnnouncementsRvAdapter
 import com.example.techknowapp.feature.dashboard.adapters.ClassRvAdapter
@@ -167,7 +165,7 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
         findNavController().navigate(R.id.action_DashboardFragment_to_CourseFragment, bundle)
     }
 
-    private fun goToAnnouncementDetails(announcement: GlobalAnnouncement) {
+    private fun goToAnnouncementDetails(announcement: Announcement) {
         val bundle = bundleOf("announcement" to Gson().toJson(announcement))
         findNavController().navigate(R.id.action_DashboardFragment_to_CourseFragment, bundle)
     }
@@ -199,7 +197,7 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
             }
 
             DashboardApiUtils.ANNOUNCEMENT_SUCCESS -> {
-                val listAnnouncements = response as List<GlobalAnnouncement>
+                val listAnnouncements = response as List<Announcement>
                 announcementAdapter.updateItems(listAnnouncements)
             }
 
