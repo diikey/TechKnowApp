@@ -42,12 +42,17 @@ class CourseApiUtils(private val context: Context, activity: Any) {
                 call: Call<List<CourseModule>>,
                 response: Response<List<CourseModule>>
             ) {
-                Timber.d("modules>>>${response.body()}")
+                Timber.d("success modules>>>${response.body()}")
+                if (response.body() != null) {
+                    callback.result(API_SUCCESS, response.body())
+                } else {
+                    callback.result(API_FAILED, null)
+                }
             }
 
             override fun onFailure(call: Call<List<CourseModule>>, t: Throwable) {
-                Timber.d("error modules>>>")
                 t.printStackTrace()
+                callback.result(API_FAILED, null)
             }
         })
     }

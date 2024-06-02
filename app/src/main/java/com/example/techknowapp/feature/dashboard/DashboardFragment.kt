@@ -100,10 +100,6 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
          * ON CLICKS
          */
         binding.linJoinClass.setOnClickListener {
-//            Intent(Intent.ACTION_VIEW).apply {
-//                setData(Uri.parse("https://www.google.com/"))
-//                startActivity(this)
-//            }
             joinClassDialog.isCancelable = true
             joinClassDialog.show(childFragmentManager, JoinClassDialog::class.java.simpleName)
         }

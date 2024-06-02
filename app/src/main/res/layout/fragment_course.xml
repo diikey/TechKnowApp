@@ -7,39 +7,33 @@
     android:background="#fffffc"
     tools:context=".feature.course.CourseFragment">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/iv_course_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="150dp" />
 
-            <ImageView
-                android:id="@+id/iv_course_image"
-                android:layout_width="match_parent"
-                android:layout_height="150dp" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/yellow"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/green"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/green"
+            app:tabTextColor="@color/light_green" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/yellow"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@color/green"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="@color/green"
-                app:tabTextColor="@color/light_green" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-    </ScrollView>
+    </LinearLayout>
 
 </FrameLayout>
