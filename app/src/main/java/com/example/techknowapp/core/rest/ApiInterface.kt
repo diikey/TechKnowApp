@@ -4,6 +4,7 @@ import com.example.techknowapp.core.model.Course
 import com.example.techknowapp.core.model.Announcement
 import com.example.techknowapp.core.model.CourseModule
 import com.example.techknowapp.core.model.LoginResponse
+import com.example.techknowapp.core.model.Quiz
 import com.example.techknowapp.core.model.User
 import retrofit2.Call
 import retrofit2.http.Body
@@ -31,7 +32,7 @@ interface ApiInterface {
     fun getCourseModules(@QueryMap params: Map<String, String>): Call<List<CourseModule>>
 
     @GET("get_quiz")
-    fun getQuiz(@QueryMap params: Map<String, String>): Call<List<DynamicResponse>>
+    fun getQuiz(@QueryMap params: Map<String, String>): Call<List<Quiz>>
 
     /**
      * POST REQUEST

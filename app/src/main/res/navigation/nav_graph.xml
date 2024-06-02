@@ -28,6 +28,17 @@
     <fragment
         android:id="@+id/CourseFragment"
         android:name="com.example.techknowapp.feature.course.CourseFragment"
-        tools:layout="@layout/fragment_course" />
+        tools:layout="@layout/fragment_course">
+
+        <action
+            android:id="@+id/action_CourseFragment_to_TakeQuizFragment"
+            app:destination="@id/TakeQuizFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/TakeQuizFragment"
+        android:name="com.example.techknowapp.feature.take_quiz.TakeQuizFragment"
+        tools:layout="@layout/fragment_take_quiz" />
 
 </navigation>

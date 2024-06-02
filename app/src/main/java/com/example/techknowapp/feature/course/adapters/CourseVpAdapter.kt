@@ -15,7 +15,7 @@ class CourseVpAdapter(fragment: Fragment, private val course: Course) : Fragment
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> ModulesFragment(course)
-            1 -> QuizFragment()
+            1 -> QuizFragment(course)
             2 -> NewsFragment()
             else -> throw IllegalStateException("Invalid posistion $position")
         }
