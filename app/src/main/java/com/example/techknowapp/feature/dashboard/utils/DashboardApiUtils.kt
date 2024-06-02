@@ -2,6 +2,7 @@ package com.example.techknowapp.feature.dashboard.utils
 
 import android.content.Context
 import com.example.techknowapp.core.model.Course
+import com.example.techknowapp.core.model.Announcement
 import com.example.techknowapp.core.rest.ApiClient
 import com.example.techknowapp.core.rest.ApiInterface
 import com.example.techknowapp.core.rest.DynamicResponse
@@ -15,6 +16,29 @@ import timber.log.Timber
 class DashboardApiUtils(private val context: Context, activity: Any) {
     var callback = activity as DashboardApiCallback
     private val cache = Cache(context)
+
+    fun getAnnouncements() {
+        val apiService = ApiClient(context).createService(ApiInterface::class.java)
+        val call = apiService.getGlobalAnnouncement()
+        call.enqueue(object : Callback<List<Announcement>> {
+            override fun onResponse(
+                call: Call<List<Announcement>>,
+                response: Response<List<Announcement>>
+            ) {
+                Timber.d("announcements>>>${response.body()}")
+                if (response.body() != null) {
+                    callback.result(ANNOUNCEMENT_SUCCESS, response.body())
+                } else {
+                    callback.result(ANNOUNCEMENT_FAILED, null)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Announcement>>, t: Throwable) {
+                t.printStackTrace()
+                callback.result(ANNOUNCEMENT_FAILED, null)
+            }
+        })
+    }
 
     fun getCourse() {
         val apiService = ApiClient(context).createService(ApiInterface::class.java)
@@ -64,6 +88,8 @@ class DashboardApiUtils(private val context: Context, activity: Any) {
         const val API_FAILED = "failed"
         const val APPLICATION_SUCCESS = "application_success"
         const val APPLICATION_FAILED = "application_failed"
+        const val ANNOUNCEMENT_SUCCESS = "announcement_success"
+        const val ANNOUNCEMENT_FAILED = "announcement_failed"
     }
 }
 
