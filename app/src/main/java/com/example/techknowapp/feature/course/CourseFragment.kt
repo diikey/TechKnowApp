@@ -43,7 +43,11 @@ class CourseFragment : Fragment() {
         /**
          * IMAGEVIEW
          */
-        binding.ivCourseImage.load(course.image)
+        if (course.image == null) {
+            binding.ivCourseImage.visibility = View.GONE
+        } else {
+            binding.ivCourseImage.load(course.image)
+        }
 
         /**
          * TAB LAYOUT AND VIEW PAGER

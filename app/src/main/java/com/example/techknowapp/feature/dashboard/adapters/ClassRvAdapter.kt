@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.techknowapp.R
 import com.example.techknowapp.core.model.Course
 import com.example.techknowapp.databinding.ListDashboardClassBinding
 
@@ -22,13 +23,14 @@ class ClassRvAdapter(
         fun bind(data: Course) {
             binding.tvClassName.text = data.name
             binding.tvClassDescription.text = data.description
-            if (data.image != "") {
+            if (data.image != null) {
                 binding.ivCourseImage.load(data.image)
                 binding.ivCourseImage.visibility = View.VISIBLE
                 binding.tvImagePlacheholder.visibility = View.GONE
             } else {
-                binding.ivCourseImage.visibility = View.GONE
-                binding.tvImagePlacheholder.visibility = View.VISIBLE
+                binding.ivCourseImage.visibility = View.VISIBLE
+                binding.tvImagePlacheholder.visibility = View.GONE
+                binding.ivCourseImage.setImageResource(R.drawable.baseline_broken_image_24)
             }
 
             binding.linCourse.setOnClickListener {

@@ -100,6 +100,10 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
             joinClassDialog.isCancelable = true
             joinClassDialog.show(childFragmentManager, JoinClassDialog::class.java.simpleName)
         }
+        binding.tvAddClass.setOnClickListener {
+            joinClassDialog.isCancelable = true
+            joinClassDialog.show(childFragmentManager, JoinClassDialog::class.java.simpleName)
+        }
     }
 
     private fun initApiCall() {
@@ -114,6 +118,7 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
             binding.tvNoAnnouncements.visibility = View.GONE
             binding.pbLoadingAnnouncements.visibility = View.VISIBLE
 
+            binding.tvAddClass.visibility = View.GONE
             binding.rvClassList.visibility = View.GONE
             binding.linJoinClass.visibility = View.GONE
             binding.pbLoadingClasses.visibility = View.VISIBLE
@@ -128,9 +133,11 @@ class DashboardFragment : Fragment(), DashboardApiCallback {
     private fun classListCallback() {
         if (adapter.itemCount == 0) {
             binding.rvClassList.visibility = View.GONE
+            binding.tvAddClass.visibility = View.GONE
             binding.linJoinClass.visibility = View.VISIBLE
             return
         }
+        binding.tvAddClass.visibility = View.VISIBLE
         binding.rvClassList.visibility = View.VISIBLE
         binding.linJoinClass.visibility = View.GONE
     }

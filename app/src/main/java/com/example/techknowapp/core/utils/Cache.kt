@@ -46,5 +46,6 @@ class Cache(context: Context) {
     companion object {
         const val TOKEN = "token"
         const val USER_INFO = "user_info"
+        const val QUIZ_TAKEN = "quiz_taken"
     }
 }

@@ -1,20 +1,31 @@
 package com.example.techknowapp.feature.take_quiz
 
+import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
+import androidx.navigation.fragment.findNavController
 import com.example.techknowapp.core.model.Question
 import com.example.techknowapp.core.model.Quiz
 import com.example.techknowapp.core.model.QuizAnswer
+import com.example.techknowapp.core.model.QuizTaken
 import com.example.techknowapp.core.model.TakeQuizRes
+import com.example.techknowapp.core.utils.Cache
+import com.example.techknowapp.core.utils.LoadingDialog
 import com.example.techknowapp.databinding.FragmentTakeQuizBinding
 import com.example.techknowapp.feature.take_quiz.utils.TakeQuizApiCallback
 import com.example.techknowapp.feature.take_quiz.utils.TakeQuizApiUtils
+import com.example.techknowapp.feature.take_quiz.utils.ToolbarControl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import timber.log.Timber
@@ -27,13 +38,48 @@ class TakeQuizFragment : Fragment(), TakeQuizApiCallback {
     private lateinit var questions: List<Question>
     private lateinit var takeQuizApiUtils: TakeQuizApiUtils
     private lateinit var timer: CountDownTimer
+    private lateinit var handler: Handler
+    private lateinit var loadingDialog: LoadingDialog
+    private lateinit var cache: Cache
 
     private var index = 0
+    private var toolbarControl: ToolbarControl? = null
 
     private val answerHash = HashMap<String, QuizAnswer>()
+    private val doneQuizTask = Runnable {
+        computeScore()
+    }
+    private val onBackCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (binding.linStartQuiz.visibility == View.VISIBLE) {
+                findNavController().popBackStack()
+            } else {
+                Toast.makeText(requireContext(), "Your quiz is ongoing!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     companion object {
         const val COUNTDOWN_INTERVAL = 1000L
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is ToolbarControl) {
+            toolbarControl = context
+        } else {
+            throw RuntimeException("$context must implement ToolbarControl")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        toolbarControl = null
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackCallback)
     }
 
     override fun onCreateView(
@@ -51,6 +97,9 @@ class TakeQuizFragment : Fragment(), TakeQuizApiCallback {
         val typeQuiz = object : TypeToken<Quiz>() {}.type
         quiz = Gson().fromJson(quizString, typeQuiz)
 
+        cache = Cache(requireContext())
+        handler = Handler(Looper.getMainLooper())
+        loadingDialog = LoadingDialog(requireContext())
         takeQuizApiUtils = TakeQuizApiUtils(requireContext(), this)
 
         initComponents(view)
@@ -62,6 +111,7 @@ class TakeQuizFragment : Fragment(), TakeQuizApiCallback {
         binding.btnStartQuiz.setOnClickListener {
             binding.linStartQuiz.visibility = View.GONE
             binding.linQuizQuestions.visibility = View.VISIBLE
+            toolbarControl?.hideShowToolbar(false)
 
             setQuestion()
             timer.start()
@@ -101,7 +151,20 @@ class TakeQuizFragment : Fragment(), TakeQuizApiCallback {
         }
 
         binding.btnFinishQuiz.setOnClickListener {
-            computeScore()
+            AlertDialog.Builder(requireContext()).apply {
+                setTitle("Confirmation")
+                setMessage("Are you sure you want to end this quiz? You still have time!")
+                setPositiveButton("YES") { dialog, _ ->
+                    loadingDialog.show("Processing score. Please wait...")
+                    timer.cancel()
+                    toolbarControl?.hideShowToolbar(true)
+                    handler.removeCallbacks(doneQuizTask)
+                    handler.postDelayed(doneQuizTask, 2000)
+                }
+                setNegativeButton("NO") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            }.show()
         }
     }
 
@@ -132,8 +195,32 @@ class TakeQuizFragment : Fragment(), TakeQuizApiCallback {
             }
         }
 
-        Timber.d("final score>>>>>>>>$score")
-        timer.cancel()
+        loadingDialog.dismiss()
+        val type = object : TypeToken<ArrayList<QuizTaken>>() {}.type
+        val listOfQuizTaken =
+            Gson().fromJson<ArrayList<QuizTaken>>(cache.getString(Cache.QUIZ_TAKEN, "[]"), type)
+        val quizTaken = QuizTaken(
+            quiz_id = quiz.id.toString(),
+            quiz_length = questions.size.toString(),
+            quiz_score = score.toString()
+        )
+        listOfQuizTaken.add(quizTaken)
+        cache.save(Cache.QUIZ_TAKEN, Gson().toJson(listOfQuizTaken))
+        showScore(score)
+    }
+
+    private fun showScore(score: Int) {
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle("Congratulations")
+            setMessage(
+                "You have successfully finished your quiz. Well done! You got a score of " +
+                        "$score out of ${questions.size}"
+            )
+            setPositiveButton("Close") { dialog, _ ->
+                findNavController().popBackStack()
+            }
+            setCancelable(false)
+        }.show()
     }
 
     private fun getRbPerIndex(index: Int): String {
@@ -179,8 +266,8 @@ class TakeQuizFragment : Fragment(), TakeQuizApiCallback {
             }
 
             override fun onFinish() {
-                Timber.d("timer finished>>>>>")
-                computeScore()
+                handler.removeCallbacks(doneQuizTask)
+                handler.postDelayed(doneQuizTask, 2000)
             }
         }
     }
@@ -224,7 +311,13 @@ class TakeQuizFragment : Fragment(), TakeQuizApiCallback {
                 computeTimer()
             }
 
-            TakeQuizApiUtils.API_FAILED -> {}
+            TakeQuizApiUtils.API_FAILED -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Something went wrong. Leave the page and try again.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 }

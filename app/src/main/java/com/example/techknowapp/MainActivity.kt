@@ -19,11 +19,12 @@ import com.example.techknowapp.core.model.User
 import com.example.techknowapp.core.utils.Cache
 import com.example.techknowapp.databinding.ActivityMainBinding
 import com.example.techknowapp.feature.dashboard.DashboardFragment
+import com.example.techknowapp.feature.take_quiz.utils.ToolbarControl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ToolbarControl {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -141,5 +142,13 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun hideShowToolbar(isShow: Boolean) {
+        if (isShow) {
+            supportActionBar!!.show()
+            return
+        }
+        supportActionBar!!.hide()
     }
 }

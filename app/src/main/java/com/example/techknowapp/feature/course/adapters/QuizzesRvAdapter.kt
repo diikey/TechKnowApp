@@ -1,22 +1,29 @@
 package com.example.techknowapp.feature.course.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.techknowapp.R
 import com.example.techknowapp.core.model.Quiz
+import com.example.techknowapp.core.model.QuizTaken
+import com.example.techknowapp.core.utils.Cache
 import com.example.techknowapp.databinding.ListQuizzesBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class QuizzesRvAdapter(
     private val onListUpdate: () -> Unit,
-    private val onTakeQuiz: (Quiz) -> Unit
+    private val onTakeQuiz: (Quiz) -> Unit,
+    private val cache: Cache
 ) : RecyclerView.Adapter<QuizzesRvAdapter.ViewHolder>() {
 
     class ViewHolder(
         private val binding: ListQuizzesBinding,
-        private val onTakeQuiz: (Quiz) -> Unit
+        private val onTakeQuiz: (Quiz) -> Unit,
+        private val cache: Cache
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Quiz) {
             binding.tvQuizName.text = data.name
@@ -24,6 +31,19 @@ class QuizzesRvAdapter(
                 binding.ivQuizIsLock.setImageResource(R.drawable.baseline_lock_open_24)
             } else {
                 binding.ivQuizIsLock.setImageResource(R.drawable.baseline_lock_24)
+            }
+
+            val type = object : TypeToken<ArrayList<QuizTaken>>() {}.type
+            val listOfQuizTaken =
+                Gson().fromJson<ArrayList<QuizTaken>>(cache.getString(Cache.QUIZ_TAKEN, "[]"), type)
+            val quizIndex = listOfQuizTaken.indexOfFirst { it.quiz_id == data.id.toString() }
+            if (quizIndex != -1) {
+                val score = listOfQuizTaken[quizIndex].quiz_score
+                val quizSize = listOfQuizTaken[quizIndex].quiz_length
+                binding.tvQuizScore.visibility = View.VISIBLE
+                binding.tvQuizScore.text = "Score: $score/$quizSize"
+            } else {
+                binding.tvQuizScore.visibility = View.GONE
             }
 
             binding.linQuiz.setOnClickListener {
@@ -35,7 +55,7 @@ class QuizzesRvAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding =
             ListQuizzesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(itemBinding, onTakeQuiz)
+        return ViewHolder(itemBinding, onTakeQuiz, cache)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

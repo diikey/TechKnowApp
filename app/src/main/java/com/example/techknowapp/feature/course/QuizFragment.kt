@@ -13,17 +13,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.techknowapp.R
 import com.example.techknowapp.core.model.Course
 import com.example.techknowapp.core.model.Quiz
+import com.example.techknowapp.core.model.QuizTaken
+import com.example.techknowapp.core.utils.Cache
 import com.example.techknowapp.databinding.FragmentQuizBinding
 import com.example.techknowapp.feature.course.adapters.QuizzesRvAdapter
 import com.example.techknowapp.feature.course.utils.CourseApiCallback
 import com.example.techknowapp.feature.course.utils.CourseApiUtils
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class QuizFragment(private val course: Course) : Fragment(), CourseApiCallback {
 
     private lateinit var binding: FragmentQuizBinding
     private lateinit var courseApiUtils: CourseApiUtils
     private lateinit var adapter: QuizzesRvAdapter
+    private lateinit var cache: Cache
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +39,7 @@ class QuizFragment(private val course: Course) : Fragment(), CourseApiCallback {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        cache = Cache(requireContext())
         courseApiUtils = CourseApiUtils(requireContext(), this)
 
         initComponents()
@@ -56,7 +61,8 @@ class QuizFragment(private val course: Course) : Fragment(), CourseApiCallback {
                     return@QuizzesRvAdapter
                 }
                 takeQuizDialog(data)
-            }
+            },
+            cache = cache
         )
         adapter.onAttachedToRecyclerView(binding.rvQuizzes)
         binding.rvQuizzes.adapter = adapter
@@ -92,6 +98,20 @@ class QuizFragment(private val course: Course) : Fragment(), CourseApiCallback {
     }
 
     private fun takeQuizDialog(quiz: Quiz) {
+        val type = object : TypeToken<ArrayList<QuizTaken>>() {}.type
+        val listOfQuizTaken =
+            Gson().fromJson<ArrayList<QuizTaken>>(cache.getString(Cache.QUIZ_TAKEN, "[]"), type)
+
+        val quizTakenIndex = listOfQuizTaken.indexOfFirst { it.quiz_id == quiz.id.toString() }
+        if (quizTakenIndex != -1) {
+            Toast.makeText(
+                requireContext(),
+                "You have already taken this quiz.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
         AlertDialog.Builder(requireContext()).apply {
             setTitle("Confirmation")
             setMessage("Do you want to take this quiz?")
