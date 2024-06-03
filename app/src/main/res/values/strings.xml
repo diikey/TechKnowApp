@@ -7,6 +7,14 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="lorem_ipsum_shorter">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus luctus nibh vel
+        mollis. Integer semper feugiat finibus. Curabitur pulvinar quam non felis pulvinar
+        condimentum. Phasellus iaculis, nisi in placerat fringilla, sem orci accumsan turpis, eu
+        mattis eros nulla vel odio. Quisque egestas augue vitae velit ultrices, id aliquam tellus
+        tempor. Praesent non congue risus. Vestibulum non eros ornare, ornare eros non, elementum
+        dolor. Donec aliquet fermentum blandit.
+    </string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
