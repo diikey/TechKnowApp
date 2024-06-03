@@ -5,10 +5,27 @@
     android:layout_height="match_parent"
     tools:context=".feature.course.NewsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_news"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_no_news"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingVertical="20dp"
+        android:text="No News for this Course"
+        android:textAlignment="center" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading_news"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
 </FrameLayout>

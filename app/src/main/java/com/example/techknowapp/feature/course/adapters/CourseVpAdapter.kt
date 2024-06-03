@@ -16,7 +16,7 @@ class CourseVpAdapter(fragment: Fragment, private val course: Course) : Fragment
         return when (position) {
             0 -> ModulesFragment(course)
             1 -> QuizFragment(course)
-            2 -> NewsFragment()
+            2 -> NewsFragment(course)
             else -> throw IllegalStateException("Invalid posistion $position")
         }
     }
