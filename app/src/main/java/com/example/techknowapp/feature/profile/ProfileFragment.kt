@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.techknowapp.R
 import com.example.techknowapp.core.model.User
@@ -46,6 +47,11 @@ class ProfileFragment : Fragment(), ProfileApiCallback {
     private fun initViews() {
         profileApiUtils.getProfile()
 
+        val gender = resources.getStringArray(R.array.gender)
+
+        val spinner = binding.spinnerGender
+        val adapter = ArrayAdapter(requireContext(), com.google.android.material.R.layout.support_simple_spinner_dropdown_item,gender)
+        spinner.adapter = adapter
 
         hideShow()
     }
@@ -53,7 +59,7 @@ class ProfileFragment : Fragment(), ProfileApiCallback {
     private fun hideShow() {
         if (isEdit) {
             binding.etBirthday.isEnabled = true
-            binding.etGender.isEnabled = true
+            binding.spinnerGender.isEnabled = true
             binding.etFirstName.isEnabled = true
             binding.etLastName.isEnabled = true
             binding.etStudentID.isEnabled = true
@@ -63,7 +69,7 @@ class ProfileFragment : Fragment(), ProfileApiCallback {
             binding.btnEdit.visibility = View.GONE
         } else {
             binding.etBirthday.isEnabled = false
-            binding.etGender.isEnabled = false
+            binding.spinnerGender.isEnabled = false
             binding.etFirstName.isEnabled = false
             binding.etLastName.isEnabled = false
             binding.etStudentID.isEnabled = false
@@ -91,7 +97,7 @@ class ProfileFragment : Fragment(), ProfileApiCallback {
     private fun checkFields(): Boolean {
         var bool = true
         if (binding.etFirstName.text.toString() == "" || binding.etLastName.text.toString() == ""
-            || binding.etGender.text.toString() == "" || binding.etStudentID.text.toString() == ""
+            || binding.spinnerGender.selectedItem.toString() == "" || binding.etStudentID.text.toString() == ""
             || binding.etBirthday.text.toString() == "" || binding.etEmail.text.toString() == ""
         ) {
             bool = false
@@ -107,7 +113,7 @@ class ProfileFragment : Fragment(), ProfileApiCallback {
             params["password"] = user.password
             params["first_name"] = binding.etFirstName.text.toString()
             params["last_name"] = binding.etLastName.text.toString()
-            params["gender"] = binding.etGender.text.toString()
+            params["gender"] = binding.spinnerGender.selectedItem.toString()
             params["birth_date"] = binding.etBirthday.text.toString()
             params["student_id"] = binding.etStudentID.text.toString()
             params["email"] = binding.etEmail.text.toString()
@@ -128,7 +134,11 @@ class ProfileFragment : Fragment(), ProfileApiCallback {
             binding.etStudentID.setText(user.student_id)
         }
         if (user.gender != "") {
-            binding.etGender.setText(user.gender)
+            for (x in 0 until binding.spinnerGender.adapter.count){
+                if (binding.spinnerGender.adapter.getItem(x).toString()==user.gender){
+                    binding.spinnerGender.setSelection(x)
+                }
+            }
         }
         if (user.birth_date != "") {
             binding.etBirthday.setText(user.birth_date)

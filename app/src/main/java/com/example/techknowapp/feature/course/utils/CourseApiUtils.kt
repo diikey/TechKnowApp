@@ -25,6 +25,11 @@ class CourseApiUtils(private val context: Context, activity: Any) {
                 response: Response<List<Announcement>>
             ) {
                 Timber.d("announcements>>>${response.body()}")
+                if (response.body() != null){
+                    callback.result(NEWS_SUCCESS, response.body())
+                }else{
+                    callback.result(NEWS_FAILED, null)
+                }
             }
 
             override fun onFailure(call: Call<List<Announcement>>, t: Throwable) {
@@ -85,6 +90,9 @@ class CourseApiUtils(private val context: Context, activity: Any) {
         const val API_FAILED = "failed"
         const val QUIZ_SUCCESS = "quiz_success"
         const val QUIZ_FAILED = "quiz_failed"
+        const val NEWS_SUCCESS = "news_success"
+        const val NEWS_FAILED = "news_failed"
+
     }
 }
 
